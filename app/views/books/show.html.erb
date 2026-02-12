@@ -1,0 +1,7 @@
+<h1><%= @book.name %></h1>
+
+<p><strong>Autor:</strong> <%= @book.author.name %></p>
+<p><strong>Editora:</strong> <%= @book.editora.name %></p>
+<p><strong>Gênero:</strong> <%= @book.genero.name %></p>
+
+<%= link_to 'Voltar', books_path %>

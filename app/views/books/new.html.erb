@@ -17,9 +17,11 @@
   </div>
 
   <div>
-    <%= form.label :genero_ids, "Gêneros" %>
-    <%= form.collection_check_boxes :genero_ids, @generos, :id, :name %>
+    <%= form.label :genero_id, "Gênero" %>
+    <%= form.collection_select :genero_id, @generos, :id, :name,
+                               prompt: 'Selecione um gênero' %>
   </div>
+
 
   <%= form.submit 'Criar Livro' %>
 <% end %>
