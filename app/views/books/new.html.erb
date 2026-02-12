@@ -1,0 +1,29 @@
+<%= form_with model: @book do |form| %>
+  <div>
+    <%= form.label :name, "Título" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :author_id, "Autor" %>
+    <%= form.collection_select :author_id, @authors, :id, :name,
+                               prompt: 'Selecione um autor' %>
+  </div>
+
+  <div>
+    <%= form.label :editora_id, "Editora" %>
+    <%= form.collection_select :editora_id, @editoras, :id, :name,
+                               prompt: 'Selecione uma editora' %>
+  </div>
+
+  <div>
+    <%= form.label :genero_ids, "Gêneros" %>
+    <%= form.collection_check_boxes :genero_ids, @generos, :id, :name %>
+  </div>
+
+  <%= form.submit 'Criar Livro' %>
+<% end %>
+
+<%= @book.errors.full_messages.each do |msg| %>
+  <div><%= msg %></div>
+<% end %>

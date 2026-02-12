@@ -11,6 +11,16 @@ Rails.application.routes.draw do
   resources :editoras
   resources :authors
   resources :abas
-  
+  resources :sessions
+  resources :accounts
+
+
+  # config/routes.rb
+  resources :authors do
+    member do
+      post :create_book
+    end
+  end
+
   root "books#index"
 end

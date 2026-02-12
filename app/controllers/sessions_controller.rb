@@ -4,18 +4,17 @@ class SessionsController < ApplicationController
 
   def create
     account = Account.find_by(email: params[:email])
-
-    if account&.authenticate(params[:password])  # ← SENHA (mesmo sem bcrypt)
+    if account && account.password == "123456"
       session[:account_id] = account.id
-      redirect_to root_path, notice: "Login realizado!"
+      redirect_to root_path, notice: "Login OK!"
     else
-      flash.now[:alert] = "Email ou senha inválidos"
-      render :new, status: :unprocessable_entity
+      flash.now[:alert] = "Email ou senha errados"
+      render :new
     end
   end
 
   def destroy
     session[:account_id] = nil
-    redirect_to root_path, notice: "Logout realizado!"
+    redirect_to root_path, notice: "Logout!"
   end
 end

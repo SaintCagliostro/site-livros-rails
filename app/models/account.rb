@@ -1,8 +1,12 @@
-# app/models/account.rb
 class Account < ApplicationRecord
   belongs_to :author
-  # has_secure_password
+  #attr_accessor :password
 
   validates :email, presence: true, uniqueness: true
-  attr_accessor :password
+  validates :password, presence: true, if: :password_present?
+
+  private
+  def password_present?
+    password.present?
+  end
 end

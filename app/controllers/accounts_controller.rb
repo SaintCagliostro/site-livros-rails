@@ -4,12 +4,17 @@ class AccountsController < ApplicationController
   end
 
   def create
-    @account = Account.new(account_params)
-    @account.author = Author.find_or_create_by(name: @account.email.split('@').first.capitalize)
+    @account = Account.new(
+      email: params[:account][:email],
+      password: params[:account][:password]  # ← SALVA DIRETO NO BANCO!
+    )
+    @account.author = Author.find_or_create_by(
+      name: params[:account][:email].split('@').first.capitalize
+    )
 
     if @account.save
-      session[:account_id] = @account.id  # ← LOGA AUTOMATICAMENTE
-      redirect_to root_path, notice: "Conta criada e login realizado!"
+      session[:account_id] = @account.id
+      redirect_to root_path, notice: "Conta criada!"
     else
       render :new, status: :unprocessable_entity
     end

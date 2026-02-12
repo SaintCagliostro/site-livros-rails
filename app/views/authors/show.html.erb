@@ -9,13 +9,15 @@
         <ul>
           <% @author.books.each do |book| %>
             <li><%= link_to book.name, book %></li>
-          <% end %>
+        <% end %>
         </ul>
       <% else %>
         <p>Nenhum livro cadastrado ainda.</p>
       <% end %>
     </div>
   </div>
+
+  <%= link_to "Novo Livro", new_book_path %>
 
   <%= link_to " Todos Autores", authors_path, class: "btn btn-secondary mt-3" %>
   <%= link_to " Biblioteca", root_path, class: "btn btn-primary mt-3 ms-2" %>
