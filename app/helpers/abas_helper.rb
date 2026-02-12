@@ -1,0 +1,2 @@
+module AbasHelper
+end
