@@ -1,5 +1,5 @@
 class Book < ApplicationRecord
   belongs_to :author
   belongs_to :editora
-  belongs_to :genero
+  belongs_to :genero, dependent: :destroy
 end

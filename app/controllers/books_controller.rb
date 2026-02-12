@@ -1,16 +1,23 @@
 class BooksController < ApplicationController
-  def index
-    @generos = Genero.all
-    @editoras = Editora.all
-    @authors = Author.all
-    @books = Book.all
-  end
+    def index
+    @books = case params[:sort]
+             when 'recent' then Book.order(created_at: :desc)
+             when 'oldest' then Book.order(created_at: :asc)
+             when 'alpha'  then Book.order(name: :asc)
+             else Book.all
+             end
+
+
+    end
+
+
 
   def new
     @book = Book.new
     @generos = Genero.all
     @editoras = Editora.all
     @authors = Author.all
+    @author = Author.new
   end
 
   def create
@@ -26,11 +33,10 @@ class BooksController < ApplicationController
     end
   end
 
-  def show  # ← ADICIONE ESTE MÉTODO
+  def show
     @book = Book.find(params[:id])
-    @generos = Genero.all
-    @editoras = Editora.all
-    @authors = Author.all
+    @author = @book.author
+    @suggested_books = Book.where(author: @author).where.not(id: @book.id).limit(5)
   end
 
   private
@@ -38,5 +44,4 @@ class BooksController < ApplicationController
   def book_params
     params.require(:book).permit(:name, :author_id, :editora_id, :genero_id)
   end
-
 end

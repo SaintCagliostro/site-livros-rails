@@ -1,7 +1,368 @@
-<h1><%= @book.name %></h1>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= @book.name %> - Biblioteca Mística</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+  <style>
+      :root {
+          --primary-dark: #1a1a2e;
+          --primary-blue: #16213e;
+          --accent: #0f3460;
+          --light-bg: rgba(255, 255, 255, 0.92);
+          --glass-bg: rgba(255, 255, 255, 0.88);
+          --border-light: rgba(0, 0, 0, 0.06);
+          --text-primary: #1a202c;
+          --text-secondary: #4a5568;
+          --text-muted: #a0aec0;
+      }
 
-<p><strong>Autor:</strong> <%= @book.author.name %></p>
-<p><strong>Editora:</strong> <%= @book.editora.name %></p>
-<p><strong>Gênero:</strong> <%= @book.genero.name %></p>
+      * {
+          box-sizing: border-box;
+      }
 
-<%= link_to 'Voltar', books_path %>
+      body {
+          background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-blue) 50%, var(--accent) 100%);
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          color: var(--text-primary);
+          line-height: 1.6;
+          min-height: 100vh;
+          padding: 2rem 0;
+          margin: 0;
+      }
+
+      .book-container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 1.5rem;
+          display: grid;
+          grid-template-columns: 1fr 320px;
+          gap: 3rem;
+          align-items: start;
+      }
+
+      .book-main {
+          background: var(--light-bg);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--border-light);
+          border-radius: 24px;
+          padding: 3rem;
+          box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+      }
+
+      .book-title {
+          font-size: clamp(2.25rem, 5vw, 3.25rem);
+          font-weight: 700;
+          color: var(--text-primary);
+          margin: 0 0 3rem 0;
+          letter-spacing: -0.02em;
+          line-height: 1.2;
+      }
+
+      .book-header {
+          display: grid;
+          grid-template-columns: 200px 1fr;
+          gap: 2rem;
+          margin-bottom: 3rem;
+          align-items: start;
+      }
+
+      .book-image-placeholder {
+          width: 200px;
+          height: 300px;
+          background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+          border: 2px dashed #e2e8f0;
+          border-radius: 12px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          color: var(--text-muted);
+          font-size: 0.9rem;
+          text-align: center;
+          transition: all 0.3s ease;
+      }
+
+      .book-image-placeholder:hover {
+          border-color: #cbd5e0;
+          background: linear-gradient(135deg, #edf2f7 0%, #e2e8f0 100%);
+      }
+
+      .book-description {
+          padding: 2rem;
+          background: rgba(255,255,255,0.5);
+          border-radius: 16px;
+          border-left: 4px solid var(--accent);
+          min-height: 200px;
+          color: var(--text-secondary);
+      }
+
+      .book-meta-row {
+          display: flex;
+          gap: 2rem;
+          padding: 1.5rem 0;
+          border-bottom: 1px solid rgba(0,0,0,0.06);
+          margin-bottom: 2rem;
+      }
+
+      .meta-item {
+          flex: 1;
+          text-decoration: none;
+          color: inherit;
+          padding: 1rem 0.5rem;
+          position: relative;
+          transition: all 0.2s ease;
+      }
+
+      .meta-item::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          width: 0;
+          height: 2px;
+          background: var(--accent);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          transform: translateX(-50%);
+      }
+
+      .meta-item:hover {
+          color: var(--text-primary);
+      }
+
+      .meta-item:hover::after {
+          width: 80%;
+      }
+
+      .meta-label {
+          font-size: 0.75rem;
+          font-weight: 600;
+          color: var(--text-muted);
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          margin-bottom: 0.25rem;
+          display: block;
+      }
+
+      .meta-value {
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: var(--text-primary);
+          line-height: 1.3;
+      }
+
+      .actions-bar {
+          display: flex;
+          gap: 1rem;
+          margin-top: 2rem;
+      }
+
+      .back-btn, .home-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-weight: 500;
+          font-size: 0.9rem;
+          padding: 0.75rem 1.5rem;
+          border-radius: 12px;
+          transition: all 0.2s ease;
+          backdrop-filter: blur(10px);
+          text-decoration: none;
+          border: none;
+          cursor: pointer;
+          font-family: inherit;
+      }
+
+      .back-btn {
+          background: rgba(255,255,255,0.7);
+          color: var(--text-secondary);
+          border: 1px solid var(--border-light);
+      }
+
+      .back-btn:hover {
+          background: rgba(255,255,255,0.9);
+          color: var(--text-primary);
+          transform: translateY(-1px);
+          box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      }
+
+      .home-btn {
+          background: linear-gradient(135deg, var(--accent), var(--primary-blue));
+          color: white;
+          box-shadow: 0 4px 15px rgba(15,52,96,0.3);
+      }
+
+      .home-btn:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 8px 25px rgba(15,52,96,0.4);
+      }
+
+      .suggestions-sidebar {
+          background: var(--light-bg);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--border-light);
+          border-radius: 20px;
+          padding: 2rem;
+          height: fit-content;
+          position: sticky;
+          top: 2rem;
+          box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+      }
+
+      .suggestions-title {
+          color: var(--text-primary);
+          font-size: 1.1rem;
+          font-weight: 600;
+          margin-bottom: 1.5rem;
+          padding-bottom: 0.75rem;
+          border-bottom: 1px solid rgba(0,0,0,0.08);
+      }
+
+      .suggestion-item {
+          padding: 0.875rem 0;
+          border-bottom: 1px solid rgba(0,0,0,0.05);
+          transition: all 0.2s ease;
+      }
+
+      .suggestion-item:last-child {
+          border-bottom: none;
+      }
+
+      .suggestion-item:hover {
+          background: rgba(0,0,0,0.03);
+          padding-left: 0.75rem;
+          border-radius: 8px;
+      }
+
+      .suggestion-link {
+          color: var(--text-primary);
+          text-decoration: none;
+          font-weight: 500;
+          font-size: 0.95rem;
+      }
+
+      .empty-suggestions {
+          text-align: center;
+          color: var(--text-muted);
+          font-style: italic;
+          padding: 2rem 0.5rem;
+      }
+
+      @media (max-width: 992px) {
+          .book-container {
+              grid-template-columns: 1fr;
+              gap: 2.5rem;
+              padding: 0 1rem;
+          }
+
+          .suggestions-sidebar {
+              position: static;
+              order: -1;
+          }
+      }
+
+      @media (max-width: 768px) {
+          .book-header {
+              grid-template-columns: 1fr;
+              gap: 1.5rem;
+              text-align: center;
+          }
+
+          .book-image-placeholder {
+              width: 100%;
+              max-width: 250px;
+              height: 350px;
+              margin: 0 auto;
+          }
+
+          .book-meta-row {
+              flex-direction: column;
+              gap: 1rem;
+          }
+
+          .actions-bar {
+              flex-direction: column;
+          }
+
+          .back-btn, .home-btn {
+              width: 100%;
+              max-width: 300px;
+              justify-content: center;
+          }
+      }
+  </style>
+</head>
+
+<body>
+<div class="book-container">
+  <!-- Conteúdo Principal -->
+  <div class="book-main">
+    <h1 class="book-title"><%= @book.name %></h1>
+
+    <div class="book-header">
+      <div class="book-image-placeholder">
+        <i class="fas fa-book-open" style="font-size: 2.5rem; color: #cbd5e0; margin-bottom: 0.5rem;"></i>
+        <div>Imagem do livro</div>
+        <small>(Placeholder para implementação)</small>
+      </div>
+
+      <div class="book-description">
+        <strong>Descrição do livro</strong>
+        <p style="margin-top: 1rem; color: var(--text-muted);">
+          Espaço reservado para a sinopse e detalhes do livro.
+          Aqui você pode adicionar informações sobre o conteúdo,
+          resumo, número de páginas, ano de publicação, etc.
+        </p>
+      </div>
+    </div>
+
+    <div class="book-meta-row">
+      <%= link_to author_path(@book.author), class: "meta-item" do %>
+        <span class="meta-label">Autor</span>
+        <span class="meta-value"><%= @book.author.name %></span>
+      <% end %>
+
+      <%= link_to editora_path(@book.editora), class: "meta-item" do %>
+        <span class="meta-label">Editora</span>
+        <span class="meta-value"><%= @book.editora.name %></span>
+      <% end %>
+
+      <%= link_to genero_path(@book.genero), class: "meta-item" do %>
+        <span class="meta-label">Gênero</span>
+        <span class="meta-value"><%= @book.genero.name %></span>
+      <% end %>
+    </div>
+
+    <!-- Barra de ações com Voltar (página anterior) e Voltar ao Início -->
+    <div class="actions-bar">
+      <%= link_to "<i class='fas fa-arrow-left'></i> Página Anterior".html_safe, :back,
+                  class: 'back-btn' %>
+      <%= link_to "<i class='fas fa-home'></i> Voltar ao Início".html_safe, root_path,
+                  class: 'home-btn' %>
+    </div>
+  </div>
+
+  <!-- Sidebar de sugestões -->
+  <div class="suggestions-sidebar">
+    <h3 class="suggestions-title">Outras Obras</h3>
+    <% if @suggested_books.any? %>
+      <% @suggested_books.each do |suggested_book| %>
+        <div class="suggestion-item">
+          <%= link_to suggested_book.name.presence || "Livro sem título",
+                      book_path(suggested_book),
+                      class: "suggestion-link" %>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="empty-suggestions">
+        Nenhuma outra obra disponível
+      </div>
+    <% end %>
+  </div>
+</div>
+</body>
+</html>

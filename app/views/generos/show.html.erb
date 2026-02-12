@@ -1,10 +1,370 @@
-<p style="color: green"><%= notice %></p>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+      :root {
+          --primary-dark: #1a1a2e;
+          --primary-blue: #16213e;
+          --accent: #0f3460;
+          --light-bg: rgba(255, 255, 255, 0.92);
+          --glass-bg: rgba(255, 255, 255, 0.88);
+          --border-light: rgba(0, 0, 0, 0.06);
+          --text-primary: #1a202c;
+          --text-secondary: #4a5568;
+          --text-muted: #a0aec0;
+      }
 
-<%= render @genero %>
+      * {
+          box-sizing: border-box;
+      }
 
-<div>
-  <%= link_to "Edit this genero", edit_genero_path(@genero) %> |
-  <%= link_to "Back to generos", generos_path %>
+      body {
+          background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-blue) 50%, var(--accent) 100%);
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          color: var(--text-primary);
+          line-height: 1.6;
+          min-height: 100vh;
+          padding: 2rem 0;
+          margin: 0;
+      }
 
-  <%= button_to "Destroy this genero", @genero, method: :delete %>
+      .books-container {
+          max-width: 1600px;
+          margin: 0 auto;
+          padding: 0 1.5rem;
+      }
+
+      /* Hero Section - Header elegante */
+      .hero-section {
+          background: var(--light-bg);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--border-light);
+          border-radius: 24px;
+          padding: 4rem 3rem;
+          text-align: center;
+          margin-bottom: 3rem;
+          box-shadow: 0 25px 70px rgba(0,0,0,0.15);
+      }
+
+      .hero-title {
+          font-size: clamp(2.5rem, 6vw, 3.5rem);
+          font-weight: 700;
+          color: var(--text-primary);
+          margin: 0 0 1rem 0;
+          letter-spacing: -0.03em;
+      }
+
+      .hero-subtitle {
+          color: var(--text-secondary);
+          font-size: 1.3rem;
+          font-weight: 500;
+          margin: 0;
+          opacity: 0.9;
+      }
+
+      /* Controls section elegante */
+      .controls-section {
+          background: var(--light-bg);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--border-light);
+          border-radius: 24px;
+          padding: 2.5rem;
+          margin-bottom: 3rem;
+          box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+          text-align: right;
+      }
+
+      /* Grid principal SIMÉTRICO como o código de referência */
+      .books-grid-section {
+          background: var(--light-bg);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--border-light);
+          border-radius: 24px;
+          padding: 4rem 3rem;
+          box-shadow: 0 25px 70px rgba(0,0,0,0.15);
+          margin-bottom: 3rem;
+      }
+
+      .books-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+          gap: 2.5rem;
+          list-style: none;
+          padding: 0;
+          margin: 0;
+      }
+
+      .book-card {
+          aspect-ratio: 3 / 4.2;
+          background: rgba(255,255,255,0.95);
+          border-radius: 20px;
+          overflow: hidden;
+          text-decoration: none;
+          color: inherit;
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          position: relative;
+          border: 1px solid rgba(0,0,0,0.08);
+          box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+          display: flex;
+          flex-direction: column;
+      }
+
+      .book-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+          transition: left 0.8s;
+      }
+
+      .book-card:hover {
+          transform: translateY(-16px) scale(1.04);
+          box-shadow: 0 35px 80px rgba(0,0,0,0.25);
+          border-color: rgba(0,0,0,0.15);
+      }
+
+      .book-card:hover::before {
+          left: 100%;
+      }
+
+      .book-image-placeholder {
+          width: 100%;
+          height: 68%;
+          background: linear-gradient(135deg, #f0f7ff 0%, #e6f3ff 100%);
+          border-bottom: 2px solid rgba(15,52,96,0.1);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+          flex-shrink: 0;
+      }
+
+      .book-image-placeholder::after {
+          content: '\f02d'; /* Ícone de livro do Font Awesome */
+          font-family: 'Font Awesome 6 Free';
+          font-weight: 900;
+          font-size: 3rem;
+          opacity: 0.2;
+          color: var(--accent);
+      }
+
+      .book-info {
+          padding: 1.75rem 1.5rem;
+          height: 32%;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          flex-grow: 1;
+      }
+
+      .book-title {
+          font-size: 1.1rem;
+          font-weight: 700;
+          color: var(--text-primary);
+          line-height: 1.35;
+          margin: 0 0 1rem 0;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+      }
+
+      .book-meta {
+          font-size: 0.88rem;
+          color: var(--text-secondary);
+      }
+
+      .book-author {
+          font-weight: 600;
+          margin-bottom: 0.5rem;
+          display: block;
+      }
+
+      .book-details {
+          font-weight: 500;
+          opacity: 0.9;
+          font-size: 0.85rem;
+      }
+
+      /* Empty state elegante */
+      .empty-state {
+          min-height: 500px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          color: var(--text-muted);
+          text-align: center;
+          padding: 4rem 2rem;
+          background: var(--light-bg);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--border-light);
+          border-radius: 24px;
+          box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+      }
+
+      /* Actions bar elegante */
+      .actions-bar {
+          background: var(--light-bg);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--border-light);
+          border-radius: 24px;
+          padding: 3rem;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 1.5rem;
+          justify-content: center;
+          box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+      }
+
+      .action-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.75rem;
+          font-weight: 600;
+          font-size: 1rem;
+          color: var(--text-secondary);
+          text-decoration: none;
+          padding: 1.25rem 2.5rem;
+          border: 2px solid rgba(0,0,0,0.1);
+          border-radius: 16px;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          background: rgba(255,255,255,0.85);
+          backdrop-filter: blur(15px);
+          white-space: nowrap;
+      }
+
+      .action-btn:hover {
+          background: rgba(255,255,255,1);
+          color: var(--text-primary);
+          transform: translateY(-4px);
+          box-shadow: 0 20px 45px rgba(0,0,0,0.2);
+          border-color: var(--accent);
+      }
+
+      .btn-delete {
+          background: transparent;
+          color: #dc3545;
+          border-color: rgba(220, 53, 69, 0.3);
+      }
+
+      .btn-delete:hover {
+          background: #dc3545;
+          color: white;
+          border-color: #dc3545;
+      }
+
+      /* Responsivo PERFEITO */
+      @media (max-width: 1200px) {
+          .books-grid {
+              grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+              gap: 2rem;
+          }
+      }
+
+      @media (max-width: 992px) {
+          .controls-section {
+              text-align: center;
+          }
+
+          .books-grid {
+              grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+              gap: 2rem;
+          }
+      }
+
+      @media (max-width: 768px) {
+          .books-container {
+              padding: 0 1rem;
+          }
+
+          .books-grid {
+              grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+              gap: 1.5rem;
+          }
+
+          .book-card:hover {
+              transform: translateY(-8px) scale(1.02);
+          }
+
+          .hero-section, .books-grid-section, .actions-bar {
+              padding-left: 2rem;
+              padding-right: 2rem;
+          }
+      }
+
+      @media (max-width: 480px) {
+          .books-grid {
+              grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+              gap: 1.25rem;
+          }
+      }
+  </style>
+</head>
+<body>
+<div class="books-container">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title"><%= @genero.name %></h1>
+      <p class="hero-subtitle"><%= @books.count %> obra<%= @books.count != 1 ? 's' : '' %> encontrada<%= @books.count != 1 ? 's' : '' %></p>
+    </div>
+  </section>
+
+  <!-- Controls -->
+  <div class="controls-section">
+    <div class="d-flex justify-content-end gap-3">
+      <%= link_to "<i class='fas fa-edit'></i> Editar gênero".html_safe, edit_genero_path(@genero), class: "action-btn" %>
+      <%= link_to "<i class='fas fa-arrow-left'></i> Voltar".html_safe, generos_path, class: "action-btn" %>
+    </div>
+  </div>
+
+  <!-- Grid SIMÉTRICO e PERFEITO -->
+  <% if @books.any? %>
+    <div class="books-grid-section">
+      <ul class="books-grid">
+        <% @books.each do |book| %>
+          <li>
+            <%= link_to book_path(book), class: "book-card" do %>
+              <div class="book-image-placeholder"></div>
+              <div class="book-info">
+                <h3 class="book-title"><%= book.name %></h3>
+                <div class="book-meta">
+                  <span class="book-author">por <%= book.author.name %></span>
+                  <span class="book-details"><%= book.editora.name %></span>
+                </div>
+              </div>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% else %>
+    <div class="empty-state">
+      <i class="fas fa-books" style="font-size: 6rem; color: #cbd5e0; margin-bottom: 2.5rem;"></i>
+      <h2>Nenhuma obra encontrada neste gênero</h2>
+      <div class="mt-4">
+        <%= link_to "<i class='fas fa-plus-circle'></i> Adicionar obra".html_safe, new_book_path(genero_id: @genero.id), class: "action-btn" %>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Delete Action -->
+  <div class="actions-bar">
+    <%= button_to "Deletar gênero", @genero,
+                  method: :delete,
+                  class: "action-btn btn-delete",
+                  data: { confirm: "Tem certeza? Isso removerá o gênero." } %>
+  </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

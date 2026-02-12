@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <title>Nova Editora</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+  <style>
+      :root {
+          --primary-dark: #1a1a2e;
+          --primary-blue: #16213e;
+          --accent: #0f3460;
+          --light-bg: rgba(255, 255, 255, 0.92);
+          --glass-bg: rgba(255, 255, 255, 0.88);
+          --border-light: rgba(0, 0, 0, 0.06);
+          --text-primary: #1a202c;
+          --text-secondary: #4a5568;
+          --text-muted: #a0aec0;
+      }
+
+      * {
+          box-sizing: border-box;
+      }
+
+      body {
+          background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-blue) 50%, var(--accent) 100%);
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          color: var(--text-primary);
+          line-height: 1.6;
+          min-height: 100vh;
+          padding: 2rem 0;
+          margin: 0;
+      }
+
+      .form-container {
+          max-width: 800px;
+          margin: 0 auto;
+          padding: 0 1.5rem;
+      }
+
+      .form-card {
+          background: var(--light-bg);
+          backdrop-filter: blur(20px);
+          border: 1px solid var(--border-light);
+          border-radius: 24px;
+          padding: 4rem;
+          box-shadow: 0 30px 80px rgba(0,0,0,0.18);
+          position: relative;
+          overflow: hidden;
+      }
+
+      .form-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+          transition: left 0.8s;
+      }
+
+      .form-card:hover::before {
+          left: 100%;
+      }
+
+      .form-header {
+          text-align: center;
+          margin-bottom: 3.5rem;
+          padding-bottom: 2.5rem;
+          border-bottom: 1px solid rgba(0,0,0,0.08);
+          position: relative;
+      }
+
+      .form-title {
+          font-size: clamp(2rem, 5vw, 2.75rem);
+          font-weight: 700;
+          color: var(--text-primary);
+          margin: 0 0 0.75rem 0;
+          letter-spacing: -0.03em;
+          line-height: 1.2;
+      }
+
+      .form-subtitle {
+          color: var(--text-secondary);
+          font-size: 1.2rem;
+          margin: 0;
+          opacity: 0.85;
+      }
+
+      .form-grid {
+          display: grid;
+          gap: 2rem;
+          margin-bottom: 3rem;
+      }
+
+      .form-group {
+          position: relative;
+      }
+
+      .form-group.full-width {
+          grid-column: 1 / -1;
+      }
+
+      .form-label {
+          display: block;
+          font-weight: 600;
+          color: var(--text-primary);
+          margin-bottom: 1rem;
+          font-size: 1rem;
+          letter-spacing: -0.01em;
+      }
+
+      .form-control, .form-select {
+          width: 100%;
+          padding: 1.25rem 1.5rem;
+          border: 1px solid var(--border-light);
+          border-radius: 16px;
+          background: rgba(255,255,255,0.95);
+          backdrop-filter: blur(15px);
+          font-size: 1rem;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          font-family: inherit;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      }
+
+      .form-control:focus, .form-select:focus {
+          outline: none;
+          border-color: var(--accent);
+          box-shadow: 0 0 0 4px rgba(15,52,96,0.12), 0 8px 25px rgba(0,0,0,0.15);
+          background: white;
+          transform: translateY(-2px);
+      }
+
+      .form-control::placeholder {
+          color: var(--text-muted);
+          font-weight: 400;
+      }
+
+      .form-control.textarea {
+          min-height: 140px;
+          resize: vertical;
+          padding-top: 1.25rem;
+          padding-bottom: 1.25rem;
+      }
+
+      .error-alert {
+          background: rgba(239,68,68,0.08);
+          border: 1px solid rgba(239,68,68,0.2);
+          border-radius: 16px;
+          padding: 2rem;
+          margin-bottom: 2.5rem;
+          backdrop-filter: blur(10px);
+      }
+
+      .error-alert h6 {
+          color: #dc2626;
+          margin: 0 0 1.25rem 0;
+          font-weight: 600;
+          font-size: 1rem;
+          letter-spacing: -0.01em;
+      }
+
+      .error-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+      }
+
+      .error-list li {
+          color: #dc2626;
+          padding: 0.5rem 0;
+          font-size: 0.95rem;
+          border-left: 3px solid #dc2626;
+          padding-left: 1rem;
+          margin-left: -1rem;
+      }
+
+      .form-actions {
+          display: flex;
+          gap: 1.5rem;
+          justify-content: center;
+          padding: 2.5rem 0 2rem 0;
+          border-top: 1px solid rgba(0,0,0,0.08);
+      }
+
+      .btn {
+          padding: 1.25rem 3rem;
+          border-radius: 16px;
+          font-weight: 600;
+          font-size: 1.05rem;
+          text-decoration: none;
+          border: none;
+          cursor: pointer;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          display: inline-flex;
+          align-items: center;
+          gap: 0.75rem;
+          backdrop-filter: blur(15px);
+          position: relative;
+          overflow: hidden;
+          font-family: inherit;
+          box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+      }
+
+      .btn-primary {
+          background: linear-gradient(135deg, var(--accent), var(--primary-blue));
+          color: white;
+      }
+
+      .btn-primary:hover:not(:disabled) {
+          transform: translateY(-4px);
+          box-shadow: 0 20px 45px rgba(15,52,96,0.4);
+      }
+
+      .btn-back, .btn-home {
+          background: rgba(255,255,255,0.95);
+          color: var(--text-secondary);
+          border: 2px solid rgba(0,0,0,0.1);
+          padding: 1.125rem 2.5rem;
+          font-size: 1rem;
+      }
+
+      .btn-back:hover, .btn-home:hover {
+          background: white;
+          color: var(--text-primary);
+          transform: translateY(-2px);
+          box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+          border-color: var(--accent);
+      }
+
+      .btn-home {
+          background: linear-gradient(135deg, var(--accent), var(--primary-blue));
+          color: white;
+          border-color: transparent;
+      }
+
+      .btn-home:hover {
+          box-shadow: 0 20px 45px rgba(15,52,96,0.45);
+      }
+
+      /* RESPONSIVO */
+      @media (max-width: 768px) {
+          .form-container {
+              padding: 0 1rem;
+          }
+
+          .form-card {
+              padding: 3rem 2rem;
+              border-radius: 20px;
+              margin: 1rem;
+          }
+
+          .form-actions {
+              flex-direction: column;
+              align-items: center;
+              gap: 1rem;
+          }
+
+          .btn {
+              width: 100%;
+              max-width: 320px;
+              justify-content: center;
+          }
+
+          .form-grid {
+              gap: 1.5rem;
+          }
+      }
+
+      @media (max-width: 480px) {
+          .form-card {
+              padding: 2.5rem 1.5rem;
+              margin: 0.5rem;
+          }
+
+          .form-header {
+              margin-bottom: 2.5rem;
+          }
+      }
+  </style>
+</head>
+
+<body>
+<div class="form-container">
+  <div class="form-card">
+    <div class="form-header">
+      <h1 class="form-title">Nova Editora</h1>
+      <p class="form-subtitle">Adicione uma nova editora à sua biblioteca mística</p>
+    </div>
+
+    <% if defined?(@editora) && @editora&.errors&.any? %>
+      <div class="error-alert">
+        <h6><%= pluralize(@editora.errors.count, "erro") %> encontrado<%= @editora.errors.count > 1 ? 's' : '' %>:</h6>
+        <ul class="error-list">
+          <% @editora.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <%= form_with(model: @editora || Editora.new, local: true, class: "form-grid") do |form| %>
+      <div class="form-group full-width">
+        <%= form.label :name, "Nome da Editora", class: "form-label" %>
+        <%= form.text_field :name,
+                            class: "form-control",
+                            placeholder: "Ex: Companhia das Letras, Rocco, Aleph",
+                            required: true %>
+      </div>
+
+      <div class="form-group full-width">
+        <%= form.label :descricao, "Descrição", class: "form-label" %>
+        <%= form.text_area :descricao,
+                           class: "form-control textarea",
+                           placeholder: "Breve descrição da editora e seu histórico...",
+                           rows: "5",
+                           required: true %>
+      </div>
+
+      <div class="form-actions">
+        <%= form.submit "Criar Editora",
+                        class: "btn btn-primary",
+                        data: { disable_with: "Criando..." } %>
+
+        <%= link_to "<i class='fas fa-arrow-left'></i> Página Anterior".html_safe, :back,
+                    class: "btn btn-back" %>
+
+        <%= link_to "<i class='fas fa-home'></i> Voltar ao Início".html_safe, root_path,
+                    class: "btn btn-home" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+</body>
+</html>
