@@ -1,2 +1,22 @@
-<h1>Authors#show</h1>
-<p>Find me in app/views/authors/show.html.erb ;p</p>
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-8">
+      <h1><%= @author.name %></h1>
+      <p class="lead">Autor da Biblioteca Mistica</p>
+
+      <h3>Livros</h3>
+      <% if @author.books.any? %>
+        <ul>
+          <% @author.books.each do |book| %>
+            <li><%= link_to book.name, book %></li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p>Nenhum livro cadastrado ainda.</p>
+      <% end %>
+    </div>
+  </div>
+
+  <%= link_to " Todos Autores", authors_path, class: "btn btn-secondary mt-3" %>
+  <%= link_to " Biblioteca", root_path, class: "btn btn-primary mt-3 ms-2" %>
+</div>

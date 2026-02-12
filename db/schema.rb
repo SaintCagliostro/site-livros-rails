@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_11_013356) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_12_004650) do
   create_table "abas", force: :cascade do |t|
     t.integer "author_id", null: false
     t.integer "book_id", null: false
@@ -26,7 +26,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_11_013356) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer "author_id", null: false
+    t.boolean "confirmed"
     t.datetime "created_at", null: false
+    t.string "email"
+    t.string "password_digest"
     t.datetime "updated_at", null: false
     t.index ["author_id"], name: "index_accounts_on_author_id"
   end

@@ -1,0 +1,6 @@
+<h2>Criar Conta</h2>
+<%= form_with model: @account do |f| %>
+  <%= f.email_field :email, placeholder: "Email" %>
+  <%= f.password_field :password, placeholder: "Senha" %>
+  <%= f.submit "Criar Conta" %>
+<% end %>
