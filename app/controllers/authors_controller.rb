@@ -5,6 +5,7 @@ class AuthorsController < ApplicationController
 
   def new
     @author = Author.new
+    2.times { @author.books.build }
   end
 
   def create
@@ -20,22 +21,13 @@ class AuthorsController < ApplicationController
     @author = Author.find(params[:id])
   end
 
-  def create_book
-    @author = Author.find(params[:author_id])
-    @book = @author.books.create(book_params)
-    if @book.persisted?
-      redirect_to @author, notice: "Livro '#{@book.name}' adicionado!"
-    else
-      render :show
-    end
-  end
-
   private
-  def author_params
-    params.require(:author).permit(:name, :bio)
-  end
 
-  def book_params
-    params.require(:book).permit(:name, :isbn, :genero_ids => [], :editora_ids => [])
+  def author_params
+    params.require(:author).permit(
+      :name,
+      :bio,
+      books_attributes: [:id, :name, :genero_id, :editora_id, :_destroy]
+    )
   end
 end
