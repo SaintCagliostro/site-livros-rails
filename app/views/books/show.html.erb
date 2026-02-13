@@ -299,7 +299,6 @@
 
 <body>
 <div class="book-container">
-  <!-- Conteúdo Principal -->
   <div class="book-main">
     <h1 class="book-title"><%= @book.name %></h1>
 
@@ -337,7 +336,6 @@
       <% end %>
     </div>
 
-    <!-- Barra de ações com Voltar (página anterior) e Voltar ao Início -->
     <div class="actions-bar">
       <%= link_to "<i class='fas fa-arrow-left'></i> Página Anterior".html_safe, :back,
                   class: 'back-btn' %>
@@ -346,7 +344,6 @@
     </div>
   </div>
 
-  <!-- Sidebar de sugestões -->
   <div class="suggestions-sidebar">
     <h3 class="suggestions-title">Outras Obras</h3>
     <% if @suggested_books.any? %>

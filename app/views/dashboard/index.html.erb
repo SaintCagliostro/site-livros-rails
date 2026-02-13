@@ -39,7 +39,6 @@
           padding: 0 1.5rem;
       }
 
-      /* Hero Section MINIMALISTA */
       .hero-section {
           background: var(--light-bg);
           backdrop-filter: blur(20px);
@@ -51,7 +50,6 @@
           box-shadow: 0 25px 70px rgba(0,0,0,0.15);
       }
 
-      /* Barra de pesquisa ACIMA do subtítulo */
       .hero-search {
           max-width: 500px;
           margin: 0 auto 2rem auto;
@@ -112,7 +110,6 @@
           margin-right: auto;
       }
 
-      /* Barra de Navegação EXATA do Código 1 - COM HOVER */
       .nav-bar {
           background: var(--light-bg);
           backdrop-filter: blur(20px);
@@ -149,6 +146,8 @@
           cursor: pointer;
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           border: none;
+          text-decoration: none;
+          color: inherit;
       }
 
       .nav-label:hover {
@@ -211,7 +210,6 @@
           transform: translateY(-10px);
       }
 
-      /* HOVER FUNCIONALIDADE - Dropdown aparece no hover */
       .nav-item:hover .dropdown-content {
           max-height: 400px;
           padding: 1.25rem;
@@ -279,7 +277,6 @@
           margin-bottom: 1rem;
       }
 
-      /* Books Grid Section */
       .books-grid-section {
           background: var(--light-bg);
           backdrop-filter: blur(20px);
@@ -451,7 +448,6 @@
           box-shadow: 0 20px 60px rgba(0,0,0,0.15);
       }
 
-      /* Responsivo */
       @media (max-width: 1200px) {
           .books-grid {
               grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -506,7 +502,6 @@
 </head>
 <body>
 <div class="books-container">
-  <!-- Hero Section MINIMALISTA - Pesquisa ACIMA do subtítulo -->
   <section class="hero-section">
     <div class="hero-search">
       <i class="fas fa-search hero-search-icon"></i>
@@ -525,20 +520,18 @@
     </p>
   </section>
 
-  <!-- Barra de Navegação EXATA do Código 1 - AGORA COM HOVER -->
   <nav class="nav-bar">
     <div class="nav-grid">
-      <!-- Gêneros -->
       <div class="nav-item">
-        <div class="nav-label">
+        <a href="<%= generos_path %>" class="nav-label">
           <span class="nav-icon">⟐</span>
           <span class="nav-title">Gêneros</span>
           <div class="nav-count"><%= @generos&.count || 0 %></div>
-        </div>
+        </a>
         <div class="dropdown-content">
           <% if @generos&.any? %>
             <% @generos.limit(8).each do |genero| %>
-              <%= link_to genero.name, genero, class: "dropdown-item" %>
+              <%= link_to genero.name, genero_path(genero), class: "dropdown-item" %>
             <% end %>
             <% if @generos.count > 8 %>
               <%= link_to "Ver todos (#{@generos.count})", generos_path, class: "dropdown-item more-item" %>
@@ -549,17 +542,16 @@
         </div>
       </div>
 
-      <!-- Editoras -->
       <div class="nav-item">
-        <div class="nav-label">
+        <a href="<%= editoras_path %>" class="nav-label">
           <span class="nav-icon">⟐</span>
           <span class="nav-title">Editoras</span>
           <div class="nav-count"><%= @editoras&.count || 0 %></div>
-        </div>
+        </a>
         <div class="dropdown-content">
           <% if @editoras&.any? %>
             <% @editoras.limit(8).each do |editora| %>
-              <%= link_to editora.name, editora, class: "dropdown-item" %>
+              <%= link_to editora.name, editora_path(editora), class: "dropdown-item" %>
             <% end %>
             <% if @editoras.count > 8 %>
               <%= link_to "Ver todas", editoras_path, class: "dropdown-item more-item" %>
@@ -570,17 +562,16 @@
         </div>
       </div>
 
-      <!-- Autores -->
       <div class="nav-item">
-        <div class="nav-label">
+        <a href="<%= authors_path %>" class="nav-label">
           <span class="nav-icon">⟐</span>
           <span class="nav-title">Autores</span>
           <div class="nav-count"><%= @authors&.count || 0 %></div>
-        </div>
+        </a>
         <div class="dropdown-content">
           <% if @authors&.any? %>
             <% @authors.limit(8).each do |author| %>
-              <%= link_to author.name, author, class: "dropdown-item" %>
+              <%= link_to author.name, author_path(author), class: "dropdown-item" %>
             <% end %>
             <% if @authors.count > 8 %>
               <%= link_to "Ver todos", authors_path, class: "dropdown-item more-item" %>
@@ -591,18 +582,17 @@
         </div>
       </div>
 
-      <!-- Obras -->
       <div class="nav-item">
-        <div class="nav-label">
+        <a href="<%= books_path %>" class="nav-label">
           <span class="nav-icon">⟐</span>
           <span class="nav-title">Obras</span>
           <div class="nav-count"><%= @books&.count || 0 %></div>
-        </div>
+        </a>
         <div class="dropdown-content">
           <% if @books&.any? %>
             <% @books.last(6).each do |book| %>
               <div class="dropdown-book">
-                <%= link_to book.name, book, class: "dropdown-item" %>
+                <%= link_to book.name, book_path(book), class: "dropdown-item" %>
                 <small class="book-meta">
                   <%= book.author.name %> • <%= book.genero.name %>
                 </small>
@@ -622,7 +612,6 @@
     </div>
   </nav>
 
-  <!-- Livros Mais Recentes -->
   <% if @books&.any? %>
     <div class="books-grid-section">
       <div class="section-header">

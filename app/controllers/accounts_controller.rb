@@ -6,7 +6,7 @@ class AccountsController < ApplicationController
   def create
     @account = Account.new(
       email: params[:account][:email],
-      password: params[:account][:password]  # ← SALVA DIRETO NO BANCO!
+      password: params[:account][:password]
     )
     @account.author = Author.find_or_create_by(
       name: params[:account][:email].split('@').first.capitalize

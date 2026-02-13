@@ -21,7 +21,6 @@
       }
       .editora-container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
 
-      /* Header da Editora */
       .editora-header {
           display: grid; grid-template-columns: 200px 1fr; gap: 3rem; background: var(--light-bg);
           backdrop-filter: blur(20px); border: 1px solid var(--border-light); border-radius: 24px;
@@ -37,7 +36,6 @@
       .editora-info h1 { font-size: clamp(2.25rem, 4.5vw, 3rem); font-weight: 700; color: var(--text-primary); margin: 0 0 1rem 0; letter-spacing: -0.025em; }
       .editora-description { color: var(--text-secondary); font-size: 1.15rem; line-height: 1.65; }
 
-      /* Seções de Conteúdo */
       .content-section {
           background: var(--light-bg); backdrop-filter: blur(20px); border: 1px solid var(--border-light);
           border-radius: 24px; padding: 3rem; box-shadow: 0 20px 60px rgba(0,0,0,0.15); margin-bottom: 2rem;
@@ -46,7 +44,6 @@
       .section-title { color: var(--text-primary); font-size: 1.5rem; font-weight: 600; margin: 0; }
       .count-badge { background: rgba(255,255,255,0.6); color: var(--text-primary); padding: 0.3rem 1.2rem; border-radius: 25px; font-size: 0.9rem; font-weight: 500; }
 
-      /* Grid de Livros */
       .books-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 1.75rem; list-style: none; padding: 0; margin: 0; }
       .book-card {
           aspect-ratio: 2.8 / 4; background: rgba(255,255,255,0.75); border-radius: 16px; overflow: hidden;
@@ -64,7 +61,6 @@
       .book-image-placeholder::after { content: '📚'; font-size: 2.8rem; opacity: 0.25; }
       .book-title { padding: 1.1rem 1rem 0.9rem; font-size: 0.95rem; font-weight: 600; color: var(--text-primary); line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 
-      /* Lista de Autores */
       .authors-list { list-style: none; padding: 0; margin: 0; }
       .author-item { display: flex; align-items: center; padding: 1rem; border-radius: 12px; transition: all 0.2s ease; margin-bottom: 0.5rem; }
       .author-item:hover { background: rgba(255,255,255,0.6); transform: translateX(4px); }
@@ -100,7 +96,6 @@
 </head>
 <body>
 <div class="editora-container">
-  <!-- Header da Editora -->
   <div class="editora-header">
     <div class="editora-logo-placeholder">
       <i class="fas fa-building-columns" style="font-size: 3rem; color: #cbd5e0; margin-bottom: 0.75rem;"></i>
@@ -116,7 +111,6 @@
     </div>
   </div>
 
-  <!-- Seção Livros -->
   <div class="content-section">
     <div class="section-header">
       <h2 class="section-title">
@@ -144,7 +138,6 @@
     <% end %>
   </div>
 
-  <!-- Seção Autores -->
   <% if @autores.any? %>
     <div class="content-section">
       <div class="section-header">
@@ -166,12 +159,13 @@
     </div>
   <% end %>
 
-  <!-- Barra de Ações -->
   <div class="actions-bar">
-    <%= link_to "<i class='fas fa-arrow-left'></i> Voltar".html_safe, editoras_path, class: 'back-btn' %>
+    <%= link_to "<i class='fas fa-arrow-left'></i> voltar".html_safe, root_path, class: 'back-btn' %>
+    <%= link_to "<i class='fas '></i> Todas Editoras".html_safe, editoras_path, class: 'back-btn' %>
     <%= link_to "<i class='fas fa-book'></i> Todos os Livros".html_safe, books_path, class: "action-btn" %>
     <%= link_to "<i class='fas fa-users'></i> Todos os Autores".html_safe, authors_path, class: "action-btn" %>
     <%= link_to "<i class='fas fa-plus'></i> Novo Livro".html_safe, new_book_path, class: "action-btn" %>
+
   </div>
 </div>
 </body>

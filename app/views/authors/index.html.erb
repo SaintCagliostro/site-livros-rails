@@ -64,7 +64,6 @@
           margin: 0;
       }
 
-      /* Container para cada autor */
       .author-section {
           background: var(--light-bg);
           backdrop-filter: blur(20px);
@@ -76,7 +75,6 @@
           overflow: hidden;
       }
 
-      /* Barra horizontal do autor */
       .author-bar {
           display: flex;
           align-items: center;
@@ -117,7 +115,6 @@
           margin: 0;
       }
 
-      /* Carrossel horizontal de livros */
       .books-carousel {
           display: flex;
           gap: 1rem;
@@ -241,7 +238,6 @@
           box-shadow: 0 5px 15px rgba(0,0,0,0.1);
       }
 
-      /* Responsivo */
       @media (max-width: 992px) {
           .authors-container {
               padding: 0 1rem;
@@ -291,19 +287,16 @@
 </head>
 <body>
 <div class="authors-container">
-  <!-- Header da página -->
   <div class="page-header">
     <h1 class="page-title">Autores</h1>
     <p class="page-subtitle">Todos os autores da Biblioteca Mística e suas principais obras</p>
   </div>
 
-  <!-- Autores com livros apenas -->
   <% authors_with_books = @authors.select { |author| author.books.any? }.sort_by { |author| author.books.first.created_at } %>
 
   <% if authors_with_books.any? %>
     <% authors_with_books.each do |author| %>
       <div class="author-section">
-        <!-- Barra horizontal do autor -->
         <div class="author-bar">
           <%= link_to author_path(author) do %>
             <div class="author-avatar">
@@ -316,7 +309,6 @@
           </div>
         </div>
 
-        <!-- Carrossel horizontal dos livros -->
         <div class="books-carousel">
           <% author.books.order(created_at: :asc).each do |book| %>
             <%= link_to book_path(book), class: "book-card" do %>
@@ -335,7 +327,6 @@
     </div>
   <% end %>
 
-  <!-- Barra de ações -->
   <div class="actions-bar">
     <%= link_to "<i class='fas fa-arrow-left'></i> Pagina Inicial".html_safe, root_path, class: 'action-btn' %>
     <%= link_to "<i class='fas fa-user-plus'></i> Novo Autor".html_safe, new_author_path, class: 'action-btn' %>

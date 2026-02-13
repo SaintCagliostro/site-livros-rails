@@ -65,7 +65,26 @@
           margin: 0 auto;
       }
 
-      /* Controls refinados e minimalistas */
+      .grid-section-title {
+          text-align: center;
+          margin-bottom: 2.5rem;
+      }
+
+      .grid-section-title h2 {
+          font-size: 2.2rem;
+          font-weight: 700;
+          color: var(--text-primary);
+          margin: 0 0 0.75rem 0;
+          letter-spacing: -0.02em;
+      }
+
+      .grid-section-subtitle {
+          color: var(--text-secondary);
+          font-size: 1.1rem;
+          margin: 0;
+          opacity: 0.9;
+      }
+
       .controls-section {
           display: grid;
           grid-template-columns: 1fr auto 1fr;
@@ -103,7 +122,6 @@
           opacity: 0.8;
       }
 
-      /* Tabs minimalistas e discretos */
       .sort-tabs {
           display: flex;
           gap: 0.5rem;
@@ -134,13 +152,12 @@
           box-shadow: 0 10px 25px rgba(15,52,96,0.25);
       }
 
-      /* Grid principal mantido elegante */
       .books-grid-section {
           background: var(--light-bg);
           backdrop-filter: blur(20px);
           border: 1px solid var(--border-light);
           border-radius: 24px;
-          padding: 4rem 3rem;
+          padding: 2.5rem 3rem 4rem 3rem;
           box-shadow: 0 25px 70px rgba(0,0,0,0.15);
           margin-bottom: 3rem;
       }
@@ -155,7 +172,9 @@
       }
 
       .book-card {
-          aspect-ratio: 3 / 4.2;
+          min-height: 420px;
+          display: flex;
+          flex-direction: column;
           background: rgba(255,255,255,0.95);
           border-radius: 20px;
           overflow: hidden;
@@ -189,8 +208,8 @@
       }
 
       .book-image-placeholder {
+          flex: 1;
           width: 100%;
-          height: 68%;
           background: linear-gradient(135deg, #f0f7ff 0%, #e6f3ff 100%);
           border-bottom: 2px solid rgba(15,52,96,0.1);
           display: flex;
@@ -200,7 +219,7 @@
       }
 
       .book-image-placeholder::after {
-          content: '\f02d'; /* Ícone de livro do Font Awesome */
+          content: '\f02d';
           font-family: 'Font Awesome 6 Free';
           font-weight: 900;
           font-size: 3rem;
@@ -210,7 +229,7 @@
 
       .book-info {
           padding: 1.75rem 1.5rem;
-          height: 32%;
+          flex-shrink: 0;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
@@ -299,7 +318,6 @@
           border-color: var(--accent);
       }
 
-      /* Responsivo refinado */
       @media (max-width: 1200px) {
           .books-grid {
               grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -330,6 +348,10 @@
               gap: 1.5rem;
           }
 
+          .book-card {
+              min-height: 360px;
+          }
+
           .book-card:hover {
               transform: translateY(-8px) scale(1.02);
           }
@@ -338,12 +360,20 @@
               padding-left: 2rem;
               padding-right: 2rem;
           }
+
+          .grid-section-title h2 {
+              font-size: 1.8rem;
+          }
       }
 
       @media (max-width: 480px) {
           .books-grid {
               grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
               gap: 1.25rem;
+          }
+
+          .book-card {
+              min-height: 320px;
           }
 
           .sort-tab {
@@ -355,13 +385,11 @@
 </head>
 <body>
 <div class="books-container">
-  <!-- Header elegante -->
   <div class="page-header">
     <h1 class="page-title">Biblioteca Completa</h1>
     <p class="page-subtitle">Todos os livros organizados e catalogados da Biblioteca Mística</p>
   </div>
 
-  <!-- Controles minimalistas -->
   <div class="controls-section">
     <div class="total-books">
       <div class="total-books-number"><%= @books.count %></div>
@@ -378,9 +406,12 @@
     </div>
   </div>
 
-  <!-- Grid principal -->
   <% if @books.any? %>
     <div class="books-grid-section">
+      <div class="grid-section-title">
+        <h2>Catálogo de Livros</h2>
+        <p class="grid-section-subtitle">Explore nossa coleção completa</p>
+      </div>
       <ul class="books-grid">
         <% @books.each do |book| %>
           <li>
@@ -389,8 +420,12 @@
               <div class="book-info">
                 <h3 class="book-title"><%= book.name %></h3>
                 <div class="book-meta">
-                  <span class="book-author">por <%= book.author.name %></span>
-                  <span class="book-details"><%= book.genero.name %> • <%= book.editora.name %></span>
+                  <span class="book-author">
+                    por <%= book.author&.name || "Autor desconhecido" %>
+                  </span>
+                  <span class="book-details">
+                    <%= book.genero&.name || "Gênero" %> • <%= book.editora&.name || "Editora" %>
+                  </span>
                 </div>
               </div>
             <% end %>
@@ -406,9 +441,8 @@
     </div>
   <% end %>
 
-  <!-- Actions elegantes -->
   <div class="actions-bar">
-    <%= link_to "<i class='fas fa-arrow-left'></i> Dashboard".html_safe, root_path, class: 'action-btn' %>
+    <%= link_to "<i class='fas fa-arrow-left'></i> Voltar ao inicio!".html_safe, root_path, class: 'action-btn' %>
     <%= link_to "<i class='fas fa-plus-circle'></i> Adicionar Livro".html_safe, new_book_path, class: 'action-btn' %>
     <%= link_to "<i class='fas fa-users'></i> Ver Autores".html_safe, authors_path, class: 'action-btn' %>
   </div>

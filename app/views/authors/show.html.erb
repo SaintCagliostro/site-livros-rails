@@ -39,7 +39,6 @@
           padding: 0 1.5rem;
       }
 
-      /* Header minimalista do autor */
       .author-header {
           display: grid;
           grid-template-columns: 180px 1fr;
@@ -90,7 +89,6 @@
           margin: 1rem 0 0 0;
       }
 
-      /* Grid de livros quadrados */
       .books-grid-section {
           background: var(--light-bg);
           backdrop-filter: blur(20px);
@@ -209,7 +207,6 @@
           padding: 2rem;
       }
 
-      /* Botões minimalistas */
       .back-btn, .action-btn {
           display: inline-flex;
           align-items: center;
@@ -247,7 +244,6 @@
           border-top: 1px solid rgba(0,0,0,0.06);
       }
 
-      /* Responsivo */
       @media (max-width: 992px) {
           .author-container {
               padding: 0 1rem;
@@ -293,7 +289,6 @@
 </head>
 <body>
 <div class="author-container">
-  <!-- Header do Autor -->
   <div class="author-header">
     <div class="author-avatar-placeholder">
       <i class="fas fa-user" style="font-size: 2.5rem; color: #cbd5e0; margin-bottom: 0.5rem;"></i>
@@ -310,7 +305,6 @@
     </div>
   </div>
 
-  <!-- Grid de Livros -->
   <div class="books-grid-section">
     <div class="section-header">
       <h2 class="section-title">Obras</h2>
@@ -325,7 +319,6 @@
           <li>
             <%= link_to book_path(book), class: "book-card" do %>
               <div class="book-image-placeholder">
-                <!-- Espaço para imagem da capa -->
               </div>
               <div class="book-title"><%= book.name %></div>
             <% end %>
@@ -340,7 +333,6 @@
     <% end %>
   </div>
 
-  <!-- Barra de ações minimalista -->
   <div class="actions-bar">
     <%= link_to "<i class='fas fa-arrow-left'></i> Voltar".html_safe, root_path, class: 'back-btn' %>
     <%= link_to "<i class='fas fa-plus'></i> Novo Livro".html_safe, new_book_path, class: "action-btn" %>
