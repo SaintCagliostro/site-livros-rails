@@ -3,13 +3,6 @@ Rails.application.routes.draw do
   get "dashboard/index"
   root "dashboard#index"
 
-  resources :authors
-  # AUTENTICAÇÃO
-  get 'login', to: 'sessions#new'
-  delete 'logout', to: 'sessions#destroy'
-  resources :accounts, only: [:new, :create]
-  resources :sessions, only: [:new, :create, :destroy]
-
   # BIBLIOTECA
   resources :books
   resources :generos
